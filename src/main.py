@@ -1,8 +1,8 @@
 import pygame
 
-from src.Controller.Controller import select_bottle, check_win
-from src.Controller.Level import level
-from src.View.Draw import draw_level
+from Controller.Controller import select_bottle, check_win
+from Controller.Level import level
+from View.Draw import draw_level
 
 # pygame setup
 pygame.init()

@@ -1,6 +1,6 @@
 import pygame
 
-from src.Controller.Level import level
+from Controller.Level import level
 
 
 COLOR_MAP = {

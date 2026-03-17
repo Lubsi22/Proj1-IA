@@ -1,4 +1,4 @@
-from src.Model.Bottle import Bottle
+from Model.Bottle import Bottle
 
 
 
