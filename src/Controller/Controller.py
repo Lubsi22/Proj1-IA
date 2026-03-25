@@ -30,8 +30,17 @@ def select_bottle(mouse_pos, bottles):
 def pour(source, destination):
 
     if source.colors and len(destination.colors) < 3:
-        color = source.colors.pop()
-        destination.colors.append(color)
+        originColor = source.colors.pop()
+        destination.colors.append(originColor)
+        currColor = originColor
+        while(len(destination.colors) < 3 and originColor == currColor and source.colors):
+            if(source.colors[-1] == originColor):
+                currColor = source.colors.pop()
+                destination.colors.append(currColor)
+            else:
+                break
+
+
         return True
 
     return False
