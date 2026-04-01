@@ -42,16 +42,31 @@ def draw_color(screen, cords, colors):
 
 def draw_level_buttons(screen, buttons):
 
+    font = pygame.font.Font(None, 36)
+    player_label = font.render("Player:", True, (255, 255, 255))
+    screen.blit(player_label, (100, 10))
+
     color = (0,0,255)
 
     for btn in buttons:
-        draw_level_button(screen, btn["text"], btn["rect"], color)
+        draw_button(screen, btn["text"], btn["rect"], color)
 
 
-def draw_level_button(screen, text, rect, color, text_color=(255, 255, 255)):
+def draw_button(screen, text, rect, color, text_color=(255, 255, 255)):
     font = pygame.font.Font(None, 36)
     
     pygame.draw.rect(screen, color, rect, border_radius=8)
     label = font.render(text, True, text_color)
     screen.blit(label, label.get_rect(center=rect.center))
+
+def draw_algorithm_buttons(screen, buttons):
+
+    font = pygame.font.Font(None, 36)
+    pc_label = font.render("PC:", True, (255, 255, 255))
+    screen.blit(pc_label, (400, 10)) # chuzz ter de mudar aqui e no Button
+
+    color = (0,0,255)
+
+    for btn in buttons:
+        draw_button(screen, btn["text"], btn["rect"], color)
 

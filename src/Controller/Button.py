@@ -11,3 +11,19 @@ def level_buttons(num_levels):
         for i in range(num_levels)
     ]
     return buttons
+
+def algorithm_buttons():
+
+    button_width, button_height = 300, 40 
+    buttons = [
+        {
+            "text": "Breadth First Search",
+            "rect": pygame.Rect(400, 50 + 0 * 50, button_width, button_height),
+        },
+        {
+            "text": "Depth First Search",
+            "rect": pygame.Rect(400, 50 + 1 * 50, button_width, button_height),
+        }
+    ]
+    return buttons
+
