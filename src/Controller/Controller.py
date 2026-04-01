@@ -20,6 +20,7 @@ def select_bottle(mouse_pos, bottles):
                 if pour(selected_bottle, bottle):
                     selected_bottle = None
                 else:
+                    selected_bottle = None
                     print("Invalid move")
 
             break
@@ -28,7 +29,12 @@ def select_bottle(mouse_pos, bottles):
 def pour(source, destination):
 
     if source.colors and len(destination.colors) < 3:
-        originColor = source.colors.pop()
+        originColor = source.colors[-1]
+        
+        if destination.colors and destination.colors[-1] != originColor:
+            return False
+        
+        source.colors.pop()
         destination.colors.append(originColor)
         currColor = originColor
         while(len(destination.colors) < 3 and originColor == currColor and source.colors):
