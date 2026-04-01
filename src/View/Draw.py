@@ -1,8 +1,5 @@
 import pygame
 
-from Controller.Level import level
-
-
 COLOR_MAP = {
     "red": (255,0,0),
     "green": (0,255,0),
@@ -42,3 +39,19 @@ def draw_color(screen, cords, colors):
         )
 
         pygame.draw.rect(screen, rgb, rect)
+
+def draw_level_buttons(screen, buttons):
+
+    color = (0,0,255)
+
+    for btn in buttons:
+        draw_level_button(screen, btn["text"], btn["rect"], color)
+
+
+def draw_level_button(screen, text, rect, color, text_color=(255, 255, 255)):
+    font = pygame.font.Font(None, 36)
+    
+    pygame.draw.rect(screen, color, rect, border_radius=8)
+    label = font.render(text, True, text_color)
+    screen.blit(label, label.get_rect(center=rect.center))
+

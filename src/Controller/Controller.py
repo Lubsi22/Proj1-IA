@@ -1,5 +1,3 @@
-import pygame
-
 selected_bottle = None
 
 def select_bottle(mouse_pos, bottles):
@@ -48,9 +46,11 @@ def pour(source, destination):
 
 def check_win(bottles):
 
+    if not bottles:
+        return False
+
     for bottle in bottles:
         if not bottle.check_color():
             return False
 
     return True
-
