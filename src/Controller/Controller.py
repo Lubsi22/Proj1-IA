@@ -1,3 +1,5 @@
+import copy
+
 selected_bottle = None
 
 def select_bottle(mouse_pos, bottles):
@@ -60,3 +62,15 @@ def check_win(bottles):
             return False
 
     return True
+
+def child_bottle_states(bottles):
+    new_states = []
+    for i in bottles:
+        for j in bottles:
+            if i != j:
+                bottles_copy = copy.deepcopy(bottles)
+                src = bottles_copy[bottles.index(i)]
+                dst = bottles_copy[bottles.index(j)]
+                if pour(src, dst):
+                    new_states.append(bottles_copy)
+    return new_states

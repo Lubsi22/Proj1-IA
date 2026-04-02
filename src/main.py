@@ -5,6 +5,11 @@ from Controller.Level import level_loader
 from View.Draw import draw_level, draw_level_buttons, draw_algorithm_buttons
 from Controller.Button import level_buttons, algorithm_buttons
 
+
+
+from Search.Algorithms import test_bfs, test_dfs
+from Controller.Level import level1
+
 # pygame setup
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
@@ -30,6 +35,17 @@ while running:
             running = False
 
         if event.type == pygame.MOUSEBUTTONDOWN and state == MENU:
+            for a_btn in algorithm_buttons:
+                if a_btn["rect"].collidepoint(event.pos):
+                    current_algorithm = a_btn["text"]
+
+                    #...
+                    b = level1()
+                    if current_algorithm == "Breadth First Search":
+                        test_bfs(b)
+                    elif current_algorithm == "Depth First Search":
+                        test_dfs(b)
+
             for btn in level_buttons:
                 if btn["rect"].collidepoint(event.pos):
                     current_level = btn["level"]
@@ -37,6 +53,7 @@ while running:
                     state = LEVEL
                     level_buttons = None
                     algorithm_buttons = None
+                    break
         elif event.type == pygame.MOUSEBUTTONDOWN and state == LEVEL:
             select_bottle(pygame.mouse.get_pos(), bottles)
 
