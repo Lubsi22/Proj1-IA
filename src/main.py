@@ -4,11 +4,7 @@ from Controller.Controller import select_bottle, check_win
 from Controller.Level import level_loader
 from View.Draw import draw_level, draw_level_buttons, draw_algorithm_buttons
 from Controller.Button import level_buttons, algorithm_buttons
-
-
-
-from Search.Algorithms import test_bfs, test_dfs
-from Controller.Level import level1
+from Search.File import print_to_file
 
 # pygame setup
 pygame.init()
@@ -20,7 +16,7 @@ MENU = "menu"
 LEVEL = "level"
 
 state = MENU
-num_levels = 4 # change this to add more level buttons
+num_levels = 1 # change this to add more level buttons
 current_level = None
 level_buttons = level_buttons(num_levels)
 algorithm_buttons = algorithm_buttons()
@@ -38,14 +34,9 @@ while running:
             for a_btn in algorithm_buttons:
                 if a_btn["rect"].collidepoint(event.pos):
                     current_algorithm = a_btn["text"]
-
-                    #...
-                    b = level1()
-                    if current_algorithm == "Breadth First Search":
-                        test_bfs(b)
-                    elif current_algorithm == "Depth First Search":
-                        test_dfs(b)
-
+                    print_to_file(current_algorithm, num_levels)
+                    running = False
+ 
             for btn in level_buttons:
                 if btn["rect"].collidepoint(event.pos):
                     current_level = btn["level"]

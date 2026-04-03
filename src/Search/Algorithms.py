@@ -3,12 +3,12 @@ from .TreeNode import TreeNode
 
 from Controller.Controller import check_win, child_bottle_states
 
-def test_bfs(bottles):
+def bfs_res(bottles):
 
     goal = breadth_first_search(bottles, check_win, child_bottle_states)
     print_solution(goal)
 
-def test_dfs(bottles):
+def dfs_res(bottles):
 
     goal = depth_first_search(bottles, check_win, child_bottle_states)
     print_solution(goal)
@@ -18,7 +18,7 @@ def print_solution(goal):
     if (goal != None):
         for g in goal.state:
             print(g, end=' ')
-        print('')
+        print()
         return print_solution(goal.parent)
     return
 
