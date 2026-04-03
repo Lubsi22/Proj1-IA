@@ -2,8 +2,9 @@ import pygame
 
 from Controller.Controller import select_bottle, check_win
 from Controller.Level import level_loader
-from View.Draw import draw_level, draw_level_buttons
-from Controller.Button import level_buttons
+from View.Draw import draw_level, draw_level_buttons, draw_algorithm_buttons
+from Controller.Button import level_buttons, algorithm_buttons
+from Search.File import print_to_file
 
 # pygame setup
 pygame.init()
@@ -15,9 +16,10 @@ MENU = "menu"
 LEVEL = "level"
 
 state = MENU
-num_levels = 1
+num_levels = 1 # change this to add more level buttons
 current_level = None
-buttons = level_buttons(num_levels)
+level_buttons = level_buttons(num_levels)
+algorithm_buttons = algorithm_buttons()
 bottles = None
 
 while running:
@@ -29,12 +31,20 @@ while running:
             running = False
 
         if event.type == pygame.MOUSEBUTTONDOWN and state == MENU:
-            for btn in buttons:
+            for a_btn in algorithm_buttons:
+                if a_btn["rect"].collidepoint(event.pos):
+                    current_algorithm = a_btn["text"]
+                    print_to_file(current_algorithm, num_levels)
+                    running = False
+ 
+            for btn in level_buttons:
                 if btn["rect"].collidepoint(event.pos):
                     current_level = btn["level"]
                     bottles = level_loader[current_level]()
                     state = LEVEL
-                    buttons = None
+                    level_buttons = None
+                    algorithm_buttons = None
+                    break
         elif event.type == pygame.MOUSEBUTTONDOWN and state == LEVEL:
             select_bottle(pygame.mouse.get_pos(), bottles)
 
@@ -45,7 +55,8 @@ while running:
 
     # RENDER YOUR GAME HERE
     if state == MENU:
-        draw_level_buttons(screen, buttons)
+        draw_level_buttons(screen, level_buttons)
+        draw_algorithm_buttons(screen, algorithm_buttons)
     elif state == LEVEL:
         draw_level(screen, bottles)
 

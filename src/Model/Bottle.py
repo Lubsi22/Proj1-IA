@@ -10,6 +10,15 @@ class Bottle:
         self.width = cords[3][0] - cords[0][0]
         self.height = cords[1][1] - cords[0][1]
 
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.__dict__ == other.__dict__
+        else:
+            return False
+        
+    def __str__(self):
+        return str(self.colors) #+ ", " + str(self.cords)
+
     def check_color(self):
         if len(self.colors) == 0:
             return True

@@ -1,0 +1,13 @@
+Breadth First Search
+
+1
+[] ['red', 'red', 'red'] ['blue', 'blue', 'blue'] 
+['red', 'red'] ['red'] ['blue', 'blue', 'blue'] 
+['red', 'red'] ['red', 'blue', 'blue'] ['blue'] 
+['red', 'red', 'blue'] ['red', 'blue', 'blue'] [] 
+
+Cost: ...
+Time: ...
+Memory: ...
+
+Final results: .......
