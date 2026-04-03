@@ -1,0 +1,13 @@
+Depth First Search
+
+1
+Solution found in 3 move(s):
+
+Step 0: ['red', 'red', 'blue'] ['red', 'blue', 'blue'] [] 
+Step 1: ['red', 'red'] ['red', 'blue', 'blue'] ['blue'] 
+Step 2: ['red', 'red'] ['red'] ['blue', 'blue', 'blue'] 
+Step 3: [] ['red', 'red', 'red'] ['blue', 'blue', 'blue'] 
+
+Cost: 0 move(s)
+Time: 0.0017 seconds
+

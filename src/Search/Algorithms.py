@@ -1,3 +1,4 @@
+import heapq
 from collections import deque
 from .TreeNode import TreeNode
 
@@ -7,27 +8,36 @@ def bfs_res(bottles):
 
     goal = breadth_first_search(bottles, check_win, child_bottle_states)
     print_solution(goal)
+    return goal
 
 def dfs_res(bottles):
 
     goal = depth_first_search(bottles, check_win, child_bottle_states)
     print_solution(goal)
+    return goal
 
 def print_solution(goal):
 
-    if (goal != None):
-        for g in goal.state:
-            print(g, end=' ')
-        print()
-        return print_solution(goal.parent)
-    return
+    if goal is None:
+        print("No solution found.")
+        return
+    
+    path = []
+    node = goal
+    while node is not None:
+        path.append(node.state)
+        node = node.parent
 
-    '''
-    for g in goal.state:
-        print(g, end=' ')
-    print('')
-    #print(goal.state)
-    '''
+
+    path.reverse()
+
+    print(f"Solution found in {len(path) - 1} move(s):")
+    print()
+    for step, state in enumerate(path):
+        print(f"Step {step}:", end=" ")
+        for bottle in state:
+            print(bottle, end=" ")
+        print()
 
 def breadth_first_search(initial_state, goal_state_func, operators_func):
     root = TreeNode(initial_state)   # create the root node in the search tree
@@ -74,5 +84,66 @@ def depth_first_search_aux(node, goal_state_func, operators_func, visited):
         if new_node.state not in visited:
             node.add_child(new_node)
             return depth_first_search_aux(new_node, goal_state_func, operators_func, visited)
+
+    return None
+
+
+def heuristic(bottles):
+    color_breaks = 0
+    spread = {}
+
+    for idx, bottle in enumerate(bottles):
+        colors = bottle.colors
+        for i in range(len(colors) - 1):
+            if colors[i] != colors[i + 1]:
+                color_breaks += 1
+        for color in set(colors):
+            spread.setdefault(color, set()).add(idx)
+
+    color_spread = sum(len(tubes) - 1 for tubes in spread.values())
+
+    return color_breaks + color_spread
+
+
+# A*
+
+def astar_res(bottles):
+    goal = a_star_search(bottles, check_win, child_bottle_states)
+    print_solution(goal)
+    return goal
+
+def a_star_search(initial_state, goal_state_func, operators_func):
+    root = TreeNode(initial_state, g=0)
+
+    counter = 0
+    heap = []
+    heapq.heappush(heap, (heuristic(initial_state), counter, root))
+
+    visited = {}
+
+    while heap:
+
+        f, _, node = heapq.heappop(heap)
+
+        state_key = tuple(tuple(b.colors) for b in node.state)
+
+        if state_key in visited and visited[state_key] <= node.g:
+            continue
+        visited[state_key] = node.g
+
+        if goal_state_func(node.state):
+            return node
+
+        for child_state in operators_func(node.state):
+            child_g = node.g + 1                      
+            child_h = heuristic(child_state)
+            child_f = child_g + child_h
+
+            child_node = TreeNode(child_state, g=child_g)
+            node.add_child(child_node)
+
+            counter += 1
+            heapq.heappush(heap, (child_f, counter, child_node))
+
 
     return None
