@@ -23,7 +23,12 @@ def algorithm_buttons():
         {
             "text": "Depth First Search",
             "rect": pygame.Rect(400, 50 + 1 * 50, button_width, button_height),
+        },
+        {
+            "text": "A* Search",
+            "rect": pygame.Rect(400, 50 + 2 * 50, button_width, button_height)
         }
+
     ]
     return buttons
 
