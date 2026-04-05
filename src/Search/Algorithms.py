@@ -42,6 +42,8 @@ def print_solution(goal):
 def breadth_first_search(initial_state, goal_state_func, operators_func):
     root = TreeNode(initial_state)   # create the root node in the search tree
     queue = deque([root])   # initialize the queue to store the nodes
+    visited = set()
+    visited.add(tuple(tuple(b.colors) for b in initial_state))
 
     while queue:
         node = queue.popleft()   # get first element in the queue
@@ -49,41 +51,47 @@ def breadth_first_search(initial_state, goal_state_func, operators_func):
             return node
 
         for state in operators_func(node.state):   # go through next states 
+            state_key = tuple(tuple(b.colors) for b in state)
+            if state_key not in visited: 
+                # é suposto ser state, _ por causa do cost
+                visited.add(state_key)
 
-            # é suposto ser state, _ por causa do cost
+                new_node = TreeNode(state, g=node.g + 1)
+                # create tree node with the new state
+                # your code here
 
-            new_node = TreeNode(state)
-            # create tree node with the new state
-            # your code here
+                node.add_child(new_node)
+                # link child node to its parent in the tree
+                # your code here
 
-            node.add_child(new_node)
-            # link child node to its parent in the tree
-            # your code here
-
-            queue.append(new_node)
-            # enqueue the child node
-            # your code here
+                queue.append(new_node)
+                # enqueue the child node
+                # your code here
 
 
     return None
 
 def depth_first_search(initial_state, goal_state_func, operators_func):
     root = TreeNode(initial_state)
-    visited = []
+    visited = set()
     return depth_first_search_aux(root, goal_state_func, operators_func, visited)
 
 
 def depth_first_search_aux(node, goal_state_func, operators_func, visited):
-    visited.append(node.state)
+    state_key = tuple(tuple(b.colors) for b in node.state)
+    visited.add(state_key)
 
     if goal_state_func(node.state):
         return node
 
     for state in operators_func(node.state): # state, _
-        new_node = TreeNode(state)
-        if new_node.state not in visited:
+        state_key = tuple(tuple(b.colors) for b in state)
+        if state_key not in visited:
+            new_node = TreeNode(state, g=node.g + 1)
             node.add_child(new_node)
-            return depth_first_search_aux(new_node, goal_state_func, operators_func, visited)
+            result = depth_first_search_aux(new_node, goal_state_func, operators_func, visited)
+            if result is not None:
+                return result
 
     return None
 
