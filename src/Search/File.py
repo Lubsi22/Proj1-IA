@@ -50,4 +50,5 @@ def output_to_file(algorithm_func, level):
 
     print(f"Time: {elapsed:.4f} seconds")
     print()
-        
+    
+    sys.stdout = sys.__stdout__
