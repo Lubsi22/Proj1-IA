@@ -1,5 +1,6 @@
 import copy
 
+from Model.Bottle import Bottle
 selected_bottle = None
 
 def select_bottle(mouse_pos, bottles):
@@ -30,16 +31,13 @@ def select_bottle(mouse_pos, bottles):
 
 def pour(source, destination):
 
-    if source.colors and len(destination.colors) < 3:
+    if source.colors and len(destination.colors) < destination.capacity:
         originColor = source.colors[-1]
-        
-        if destination.colors and destination.colors[-1] != originColor:
-            return False
-        
+
         source.colors.pop()
         destination.colors.append(originColor)
         currColor = originColor
-        while(len(destination.colors) < 3 and originColor == currColor and source.colors):
+        while(len(destination.colors) < destination.capacity and originColor == currColor and source.colors):
             if(source.colors[-1] == originColor):
                 currColor = source.colors.pop()
                 destination.colors.append(currColor)
@@ -63,12 +61,19 @@ def check_win(bottles):
 
     return True
 
+def copy_bottles(bottles):
+    new_bottles = []
+    for b in bottles:
+        new_b = Bottle(list(b.colors), b.cords, b.capacity)
+        new_bottles.append(new_b)
+    return new_bottles
+
 def child_bottle_states(bottles):
     new_states = []
     for i in bottles:
         for j in bottles:
             if i != j:
-                bottles_copy = copy.deepcopy(bottles)
+                bottles_copy = copy_bottles(bottles)
                 src = bottles_copy[bottles.index(i)]
                 dst = bottles_copy[bottles.index(j)]
                 if pour(src, dst):
