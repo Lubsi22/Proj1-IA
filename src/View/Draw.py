@@ -1,9 +1,17 @@
 import pygame
 
 COLOR_MAP = {
-    "red": (255,0,0),
-    "green": (0,255,0),
-    "blue": (0,0,255)
+    "red":    (255, 0,   0),
+    "green":  (0,   255, 0),
+    "blue":   (0,   0,   255),
+    "yellow": (255, 220, 0),
+    "purple": (148, 0,   211),
+    "orange": (255, 140, 0),
+    "cyan":   (0,   220, 220),
+    "pink":   (255, 105, 180),
+    "teal":   (0,   180, 160),
+    "lime":   (160, 230, 0),
+    "brown":  (139, 90,  43),
 }
 
 def draw_level(screen, bottles):

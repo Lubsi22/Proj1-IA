@@ -33,7 +33,7 @@ def reset_menu():
         
     }
 
-num_levels = 1
+num_levels = len(level_loader)
 g = reset_menu()
 
 while running:
@@ -61,7 +61,7 @@ while running:
                         else:
                             goal = a_star_search(bottles, check_win, child_bottle_states)
 
-                        print_to_file(g["pc_algorithm"], num_levels)
+                        print_to_file(g["pc_algorithm"], g["current_level"])
 
                         path = []
                         node = goal

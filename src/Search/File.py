@@ -6,30 +6,29 @@ from Controller.Level import level_loader
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-def print_to_file(algorithm, num_levels):
+def print_to_file(algorithm, level):
 
     if algorithm == "Breadth First Search":
-        print_to_file_aux(bfs_res, algorithm, "bfs", num_levels)
+        print_to_file_aux(bfs_res, algorithm, "bfs", level)
     elif algorithm == "Depth First Search":
-        print_to_file_aux(dfs_res, algorithm, "dfs", num_levels)
+        print_to_file_aux(dfs_res, algorithm, "dfs", level)
     elif algorithm == "A* Search":                    
-        print_to_file_aux(astar_res, algorithm, "astar", num_levels)
+        print_to_file_aux(astar_res, algorithm, "astar", level)
 
 
-def print_to_file_aux(algorithm_func, algorithm, acronym, num_levels):
+def print_to_file_aux(algorithm_func, algorithm, acronym, level):
     
     output_dir = os.path.join(BASE_DIR, "output")
     file_name = os.path.join(output_dir, f"output_{acronym}.txt")
     os.makedirs(os.path.dirname(file_name), exist_ok=True)
 
 
-    with open(file_name, "w") as f:
+    with open(file_name, "a") as f:
         sys.stdout = f
         print(algorithm)
         print()
 
-        for i in range(1, num_levels + 1):
-            output_to_file(algorithm_func, i)
+        output_to_file(algorithm_func, level)
     
 
 
