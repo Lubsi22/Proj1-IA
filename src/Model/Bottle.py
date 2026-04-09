@@ -1,10 +1,11 @@
 
 class Bottle:
 
-    def __init__(self, colors, cords, capacity):
+    def __init__(self, colors, cords, capacity, visual_capacity=None):
         self.colors = colors
         self.cords = cords
         self.capacity = capacity
+        self.visual_capacity = visual_capacity if visual_capacity is not None else capacity
 
         self.x = cords[0][0]
         self.y = cords[0][1]

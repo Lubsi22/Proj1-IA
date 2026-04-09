@@ -1,56 +1,103 @@
 from Model.Bottle import Bottle
 
+SCREEN_WIDTH = 1280
+SCREEN_HEIGHT = 720
+BOTTLE_WIDTH = 80
+BOTTLE_GAP = 20
+LAYER_HEIGHT = 22
+
+
+def build_level(level_data):
+    capacities = [capacity for _, capacity in level_data]
+    max_capacity = max(capacities)
+    bottle_height = max_capacity * LAYER_HEIGHT
+    top_y = (SCREEN_HEIGHT - bottle_height) // 2
+    bottle_count = len(level_data)
+    total_width = bottle_count * BOTTLE_WIDTH + (bottle_count - 1) * BOTTLE_GAP
+    start_x = (SCREEN_WIDTH - total_width) // 2
+
+    bottles = []
+    for idx, (colors, capacity) in enumerate(level_data):
+        x = start_x + idx * (BOTTLE_WIDTH + BOTTLE_GAP)
+        cords = [
+            (x, top_y),
+            (x, top_y + bottle_height),
+            (x + BOTTLE_WIDTH, top_y + bottle_height),
+            (x + BOTTLE_WIDTH, top_y),
+        ]
+        bottles.append(Bottle(list(colors), cords, capacity, visual_capacity=max_capacity))
+
+    return bottles
+
+
 def level1():
-    bottle1 = Bottle(['red', 'red', 'blue'], [(60, 60), (60, 140), (140, 140), (140, 60)], 3)
-    bottle2 = Bottle(['red', 'blue', 'blue'], [(160, 60), (160, 140), (240, 140), (240, 60)], 3)
-    bottle3 = Bottle([], [(260, 60), (260, 140), (340, 140), (340, 60)], 3)
-    return [bottle1, bottle2, bottle3]
+    data = [
+        (['red', 'red', 'blue'], 3),
+        (['red', 'blue', 'blue'], 3),
+        ([], 3),
+    ]
+    return build_level(data)
 
 
 def level2():
-    bottle1 = Bottle(['red', 'green', 'blue'], [(60, 60), (60, 140), (140, 140), (140, 60)], 3)
-    bottle2 = Bottle(['blue', 'red', 'green'], [(160, 60), (160, 140), (240, 140), (240, 60)], 3)
-    bottle3 = Bottle(['green', 'blue', 'red'], [(260, 60), (260, 140), (340, 140), (340, 60)], 3)
-    bottle4 = Bottle([], [(360, 60), (360, 140), (440, 140), (440, 60)], 4)
-    return [bottle1, bottle2, bottle3, bottle4]
+    data = [
+        (['red', 'green', 'blue'], 3),
+        (['blue', 'red', 'green'], 3),
+        (['green', 'blue', 'red'], 3),
+        ([], 4),
+    ]
+    return build_level(data)
+
 
 def level3():
-    bottle1 = Bottle(['yellow', 'red', 'blue', 'green'], [(60, 60), (60, 140), (140, 140), (140, 60)], 4)
-    bottle2 = Bottle(['green', 'yellow', 'red', 'blue'], [(160, 60), (160, 140), (240, 140), (240, 60)], 4)
-    bottle3 = Bottle(['blue', 'green', 'yellow', 'red'], [(260, 60), (260, 140), (340, 140), (340, 60)], 4)
-    bottle4 = Bottle(['red', 'blue', 'green', 'yellow'], [(360, 60), (360, 140), (440, 140), (440, 60)], 4)
-    bottle5 = Bottle([], [(460, 60), (460, 140), (540, 140), (540, 60)], 4)
-    bottle6 = Bottle([], [(560, 60), (560, 140), (640, 140), (640, 60)], 4)
-    return [bottle1, bottle2, bottle3, bottle4, bottle5, bottle6]
+    data = [
+        (['yellow', 'red', 'blue', 'green'], 4),
+        (['green', 'yellow', 'red', 'blue'], 4),
+        (['blue', 'green', 'yellow', 'red'], 4),
+        (['red', 'blue', 'green', 'yellow'], 4),
+        ([], 4),
+        ([], 4),
+    ]
+    return build_level(data)
+
 
 def level4():
-    bottle1 = Bottle(['purple', 'orange', 'purple', 'orange'], [(60, 60), (60, 140), (140, 140), (140, 60)], 4)
-    bottle2 = Bottle(['cyan', 'purple', 'cyan', 'purple'],    [(160, 60), (160, 140), (240, 140), (240, 60)], 4)
-    bottle3 = Bottle(['orange', 'cyan', 'orange', 'cyan'],    [(260, 60), (260, 140), (340, 140), (340, 60)], 4)
-    bottle4 = Bottle([], [(360, 60), (360, 140), (440, 140), (440, 60)], 4)
-    bottle5 = Bottle([], [(460, 60), (460, 140), (540, 140), (540, 60)], 4)
-    return [bottle1, bottle2, bottle3, bottle4, bottle5]
+    data = [
+        (['purple', 'orange', 'purple', 'orange'], 4),
+        (['cyan', 'purple', 'cyan', 'purple'], 4),
+        (['orange', 'cyan', 'orange', 'cyan'], 4),
+        ([], 4),
+        ([], 4),
+    ]
+    return build_level(data)
+
 
 def level5():
-    bottle1 = Bottle(['pink', 'teal', 'lime', 'pink'],   [(60, 60),  (60, 140),  (140, 140), (140, 60)], 5)
-    bottle2 = Bottle(['lime', 'pink', 'teal', 'brown'],  [(160, 60), (160, 140), (240, 140), (240, 60)], 5)
-    bottle3 = Bottle(['teal', 'brown', 'pink', 'lime'],  [(260, 60), (260, 140), (340, 140), (340, 60)], 5)
-    bottle4 = Bottle(['brown', 'lime', 'brown', 'teal'], [(360, 60), (360, 140), (440, 140), (440, 60)], 5)
-    bottle5 = Bottle(['teal', 'pink', 'lime', 'brown'],  [(460, 60), (460, 140), (540, 140), (540, 60)], 5)
-    bottle6 = Bottle([], [(560, 60), (560, 140), (640, 140), (640, 60)], 5)
-    bottle7 = Bottle([], [(660, 60), (660, 140), (740, 140), (740, 60)], 5)
-    return [bottle1, bottle2, bottle3, bottle4, bottle5, bottle6, bottle7]
+    data = [
+        (['pink', 'teal', 'lime', 'pink'], 5),
+        (['lime', 'pink', 'teal', 'brown'], 5),
+        (['teal', 'brown', 'pink', 'lime'], 5),
+        (['brown', 'lime', 'brown', 'teal'], 5),
+        (['teal', 'pink', 'lime', 'brown'], 5),
+        ([], 5),
+        ([], 5),
+    ]
+    return build_level(data)
+
 
 def level6():
-    bottle1 = Bottle(['red', 'blue', 'green', 'yellow'],    [(60, 60),  (60, 140),  (140, 140), (140, 60)], 4)
-    bottle2 = Bottle(['yellow', 'purple', 'red', 'orange'], [(160, 60), (160, 140), (240, 140), (240, 60)], 4)
-    bottle3 = Bottle(['orange', 'green', 'purple', 'blue'],  [(260, 60), (260, 140), (340, 140), (340, 60)], 4)
-    bottle4 = Bottle(['blue', 'yellow', 'orange', 'green'],  [(360, 60), (360, 140), (440, 140), (440, 60)], 4)
-    bottle5 = Bottle(['green', 'red', 'yellow', 'purple'],   [(460, 60), (460, 140), (540, 140), (540, 60)], 4)
-    bottle6 = Bottle(['purple', 'orange', 'blue', 'red'],    [(560, 60), (560, 140), (640, 140), (640, 60)], 4)
-    bottle7 = Bottle([], [(660, 60), (660, 140), (740, 140), (740, 60)], 4)
-    bottle8 = Bottle([], [(760, 60), (760, 140), (840, 140), (840, 60)], 4)
-    return [bottle1, bottle2, bottle3, bottle4, bottle5, bottle6, bottle7, bottle8]
+    data = [
+        (['red', 'blue', 'green', 'yellow'], 4),
+        (['yellow', 'purple', 'red', 'orange'], 4),
+        (['orange', 'green', 'purple', 'blue'], 4),
+        (['blue', 'yellow', 'orange', 'green'], 4),
+        (['green', 'red', 'yellow', 'purple'], 4),
+        (['purple', 'orange', 'blue', 'red'], 4),
+        ([], 4),
+        ([], 4),
+    ]
+    return build_level(data)
+
 
 level_loader = {
     1: level1,

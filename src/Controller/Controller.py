@@ -3,6 +3,32 @@ import copy
 from Model.Bottle import Bottle
 selected_bottle = None
 
+
+def get_selected_bottle():
+    return selected_bottle
+
+
+def clear_selected_bottle():
+    global selected_bottle
+    selected_bottle = None
+
+
+def _pour_amount(source, destination):
+    if not source.colors or len(destination.colors) >= destination.capacity:
+        return 0
+
+    origin_color = source.colors[-1]
+    available_same_color = 0
+    for color in reversed(source.colors):
+        if color == origin_color:
+            available_same_color += 1
+        else:
+            break
+
+    free_slots = destination.capacity - len(destination.colors)
+    return min(available_same_color, free_slots)
+
+
 def select_bottle(mouse_pos, bottles):
     global selected_bottle
 
@@ -14,19 +40,32 @@ def select_bottle(mouse_pos, bottles):
             if bottle == selected_bottle:
                 selected_bottle = None
                 print("Deselecting bottle")
-                continue
+                return {"type": "deselected"}
             if selected_bottle is None:
                 selected_bottle = bottle
                 print("Selected source")
+                return {"type": "selected", "source": bottle}
             else:
                 print("Selected destination")
-                if pour(selected_bottle, bottle):
+                source = selected_bottle
+                move_amount = _pour_amount(source, bottle)
+                if move_amount > 0:
                     selected_bottle = None
+                    return {
+                        "type": "move",
+                        "source": source,
+                        "destination": bottle,
+                        "color": source.colors[-1],
+                        "amount": move_amount,
+                    }
                 else:
                     selected_bottle = None
                     print("Invalid move")
+                    return {"type": "invalid"}
 
             break
+
+    return None
 
 
 def pour(source, destination):
@@ -64,7 +103,7 @@ def check_win(bottles):
 def copy_bottles(bottles):
     new_bottles = []
     for b in bottles:
-        new_b = Bottle(list(b.colors), b.cords, b.capacity)
+        new_b = Bottle(list(b.colors), b.cords, b.capacity, b.visual_capacity)
         new_bottles.append(new_b)
     return new_bottles
 
