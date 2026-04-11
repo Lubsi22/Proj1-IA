@@ -44,7 +44,7 @@ def level2():
         (['red', 'green', 'blue'], 3),
         (['blue', 'red', 'green'], 3),
         (['green', 'blue', 'red'], 3),
-        ([], 4),
+        ([], 3),
     ]
     return build_level(data)
 

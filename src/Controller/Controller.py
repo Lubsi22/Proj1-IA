@@ -18,6 +18,10 @@ def _pour_amount(source, destination):
         return 0
 
     origin_color = source.colors[-1]
+
+    if destination.colors and destination.colors[-1] != origin_color:
+        return 0
+
     available_same_color = 0
     for color in reversed(source.colors):
         if color == origin_color:
@@ -72,6 +76,9 @@ def pour(source, destination):
 
     if source.colors and len(destination.colors) < destination.capacity:
         originColor = source.colors[-1]
+
+        if destination.colors and destination.colors[-1] != originColor:
+            return False
 
         source.colors.pop()
         destination.colors.append(originColor)
