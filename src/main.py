@@ -9,10 +9,10 @@ from Controller.Controller import (
     check_win,
 )
 from Controller.Level import level_loader
-from View.Draw import draw_level, draw_level_buttons, draw_algorithm_buttons, draw_exit_button, draw_game_menu_button, draw_completion_screen, draw_move_counter
+from View.Draw import draw_level, draw_level_buttons, draw_algorithm_buttons, draw_input_buttons, draw_exit_button, draw_game_menu_button, draw_completion_screen, draw_move_counter
 from Controller.Button import level_buttons, algorithm_buttons, exit_button, game_menu_button, completion_buttons
 from Search.File import print_to_file
-from Search.Algorithms import a_star_search, breadth_first_search, depth_first_search, check_win, child_bottle_states
+from Search.Algorithms import a_star_search, breadth_first_search, depth_first_search, depth_limited_search, iterative_deepening_search, check_win, child_bottle_states
 
 
 # pygame setup
@@ -43,6 +43,10 @@ def launch_level(game, level):
             goal = breadth_first_search(bottles, check_win, child_bottle_states)
         elif game["pc_algorithm"] == "Depth First Search":
             goal = depth_first_search(bottles, check_win, child_bottle_states)
+        elif game["pc_algorithm"] == "Depth Limited Search":
+            goal = depth_limited_search(bottles, check_win, child_bottle_states, game["depth_limit"])
+        elif game["pc_algorithm"] == "Iterative Deepening":
+            goal = iterative_deepening_search(bottles, check_win, child_bottle_states, game["max_depth"])
         else:
             goal = a_star_search(bottles, check_win, child_bottle_states)
 
@@ -50,7 +54,7 @@ def launch_level(game, level):
             game["state"] = MENU
             return
 
-        print_to_file(game["pc_algorithm"], game["current_level"])
+        print_to_file(game["pc_algorithm"], game["current_level"], game["depth_limit"], game["max_depth"])
 
         path = []
         node = goal
@@ -80,6 +84,8 @@ def reset_menu():
         "current_level": None,
         "level_buttons": level_buttons(num_levels),
         "algorithm_buttons": algorithm_buttons(),
+        "depth_limit": 10,
+        "max_depth": 30,
         "exit_button": exit_button(num_levels),
         "game_menu_button": game_menu_button(),
         "completion_buttons": completion_buttons(),
@@ -118,6 +124,20 @@ while running:
                 if btn["rect"].collidepoint(event.pos):
                     launch_level(g, btn["level"])
                     break
+        
+        elif event.type == pygame.KEYDOWN and g["state"] == MENU:
+            if g["pc_algorithm"] == "Depth Limited Search":
+                if event.key == pygame.K_UP:
+                    g["depth_limit"] = min(50, g["depth_limit"] + 1)
+                elif event.key == pygame.K_DOWN:
+                    g["depth_limit"] = max(1, g["depth_limit"] - 1)
+
+            elif g["pc_algorithm"] == "Iterative Deepening":
+                if event.key == pygame.K_UP:
+                    g["max_depth"] = min(50, g["max_depth"] + 1)
+                elif event.key == pygame.K_DOWN:
+                    g["max_depth"] = max(1, g["max_depth"] - 1)
+
         elif event.type == pygame.MOUSEBUTTONDOWN and g["state"] == COMPLETE:
             if g["completion_buttons"]["menu"]["rect"].collidepoint(event.pos):
                 g = reset_menu()
@@ -157,6 +177,11 @@ while running:
         draw_level_buttons(screen, g["level_buttons"])
         draw_algorithm_buttons(screen, g["algorithm_buttons"], g["pc_algorithm"])
         draw_exit_button(screen, g["exit_button"])
+
+        if g["pc_algorithm"] == "Depth Limited Search":
+            draw_input_buttons(screen, g["depth_limit"], g["pc_algorithm"])
+        elif g["pc_algorithm"] == "Iterative Deepening":
+            draw_input_buttons(screen, g["max_depth"], g["pc_algorithm"])
     elif g["state"] in (LEVEL, PC):
         draw_level(
             screen,

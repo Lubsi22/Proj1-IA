@@ -176,6 +176,19 @@ def draw_algorithm_buttons(screen, buttons, selected_text=None):
         label = font.render(btn["text"], True, (255, 255, 255))
         screen.blit(label, label.get_rect(center=btn["rect"].center))
 
+def draw_input_buttons(screen, input, algorithm):
+    if algorithm not in ("Depth Limited Search", "Iterative Deepening"):
+        return
+    font = pygame.font.Font(None, 36)
+    
+    if algorithm == "Depth Limited Search":
+        label_text = "Depth Limit"
+    elif algorithm == "Iterative Deepening":
+        label_text = "Max Depth"
+
+    label = font.render(f"{label_text}: {input} (up and down arrows to change)", True, (255, 255, 255))
+    rect = label.get_rect(center=(screen.get_width() // 2, screen.get_height() - 60))
+    screen.blit(label, rect)
 
 def draw_exit_button(screen, button):
     draw_button(screen, button["text"], button["rect"], (175, 35, 35))

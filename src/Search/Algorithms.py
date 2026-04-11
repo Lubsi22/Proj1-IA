@@ -16,6 +16,18 @@ def dfs_res(bottles):
     print_solution(goal)
     return goal
 
+def dls_res(bottles, depth_limit):
+    
+    goal = depth_limited_search(bottles, check_win, child_bottle_states, depth_limit)
+    print_solution(goal)
+    return goal
+
+def iddfs_res(bottles, max_depth):
+    
+    goal = iterative_deepening_search(bottles, check_win, child_bottle_states, max_depth)
+    print_solution(goal)
+    return goal
+
 def print_solution(goal):
 
     if goal is None:
@@ -93,6 +105,41 @@ def depth_first_search_aux(node, goal_state_func, operators_func, visited):
             if result is not None:
                 return result
 
+    return None
+
+def depth_limited_search(initial_state, goal_state_func, operators_func, depth_limit):
+    root = TreeNode(initial_state)
+    visited = set()
+    return dls_aux(root, goal_state_func, operators_func, visited, depth_limit)
+
+def dls_aux(node, goal_state_func, operators_func, visited, depth_limit):
+    state_key = tuple(tuple(b.colors) for b in node.state)
+    visited.add(state_key)
+
+    if goal_state_func(node.state):
+        return node
+
+    if node.g >= depth_limit:
+        return None
+
+    for state in operators_func(node.state):
+        state_key = tuple(tuple(b.colors) for b in state)
+        if state_key not in visited:
+            new_node = TreeNode(state, g=node.g + 1)
+            node.add_child(new_node)
+            result = dls_aux(new_node, goal_state_func, operators_func, visited, depth_limit)
+            if result is not None:
+                return result
+
+    return None
+
+def iterative_deepening_search(initial_state, goal_state_func, operators_func, max_depth):
+    for depth in range(max_depth):
+        visited = set()
+        root = TreeNode(initial_state)
+        result = dls_aux(root, goal_state_func, operators_func, visited, depth)
+        if result is not None:
+            return result
     return None
 
 

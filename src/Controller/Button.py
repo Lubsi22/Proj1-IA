@@ -47,6 +47,8 @@ def algorithm_buttons():
     labels = [
         "Breadth First Search",
         "Depth First Search",
+        "Depth Limited Search",
+        "Iterative Deepening",
         "A* Search",
         "Cancel Selection",
     ]
@@ -68,7 +70,7 @@ def algorithm_buttons():
 
 def exit_button(num_levels):
     level_end_y = _column_start_y(num_levels) + num_levels * BUTTON_HEIGHT + (num_levels - 1) * ROW_GAP
-    algorithm_rows = 4
+    algorithm_rows = 6
     algorithm_end_y = _column_start_y(algorithm_rows) + algorithm_rows * BUTTON_HEIGHT + (algorithm_rows - 1) * ROW_GAP
     button_y = max(level_end_y, algorithm_end_y) + 36
     button_x = (SCREEN_WIDTH - EXIT_BUTTON_WIDTH) // 2
