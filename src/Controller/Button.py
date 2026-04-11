@@ -9,13 +9,13 @@ EXIT_BUTTON_WIDTH = 200
 GAME_MENU_BUTTON_WIDTH = 180
 COMPLETE_BUTTON_WIDTH = 220
 BUTTON_HEIGHT = 40
-ROW_GAP = 12
+ROW_GAP = 8
 COLUMN_GAP = 80
 
 
-def _column_start_y(rows):
+def _column_start_y(rows, offset=0):
     total_height = rows * BUTTON_HEIGHT + (rows - 1) * ROW_GAP
-    return (SCREEN_HEIGHT - total_height) // 2
+    return (SCREEN_HEIGHT - total_height) // 2 - offset
 
 
 def _column_x_positions():
@@ -26,7 +26,7 @@ def _column_x_positions():
 
 def level_buttons(num_levels):
     left_x, _ = _column_x_positions()
-    start_y = _column_start_y(num_levels)
+    start_y = _column_start_y(num_levels, offset=112)
     buttons = [
         {
             "text": f"Level {i+1}",
@@ -51,9 +51,11 @@ def algorithm_buttons():
         "Iterative Deepening",
         "Uniform Cost",
         "A* Search",
+        "Greedy Search",
+        "Weighted A*",
         "Cancel Selection",
     ]
-    start_y = _column_start_y(len(labels))
+    start_y = _column_start_y(len(labels), offset=40)
     buttons = [
         {
             "text": label,
@@ -71,7 +73,7 @@ def algorithm_buttons():
 
 def exit_button(num_levels):
     level_end_y = _column_start_y(num_levels) + num_levels * BUTTON_HEIGHT + (num_levels - 1) * ROW_GAP
-    algorithm_rows = 7
+    algorithm_rows = 8
     algorithm_end_y = _column_start_y(algorithm_rows) + algorithm_rows * BUTTON_HEIGHT + (algorithm_rows - 1) * ROW_GAP
     button_y = max(level_end_y, algorithm_end_y) + 36
     button_x = (SCREEN_WIDTH - EXIT_BUTTON_WIDTH) // 2

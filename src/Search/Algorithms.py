@@ -23,6 +23,7 @@ def dls_res(bottles, depth_limit):
     return goal
 
 def ucs_res(bottles):
+    
     goal = uniform_cost_search(bottles, check_win, child_bottle_states)
     print_solution(goal)
     return goal
@@ -196,11 +197,22 @@ def heuristic(bottles):
 
     return color_breaks + color_spread
 
-
-# A*
+# heuristic search strategies
 
 def astar_res(bottles):
     goal = a_star_search(bottles, check_win, child_bottle_states)
+    print_solution(goal)
+    return goal
+
+def greedy_res(bottles):
+    
+    goal = greedy_search(bottles, check_win, child_bottle_states)
+    print_solution(goal)
+    return goal
+
+def weighted_astar_res(bottles, weight):
+    
+    goal = weighted_astar_search(bottles, check_win, child_bottle_states, weight)
     print_solution(goal)
     return goal
 
@@ -237,5 +249,71 @@ def a_star_search(initial_state, goal_state_func, operators_func):
             counter += 1
             heapq.heappush(heap, (child_f, counter, child_node))
 
+
+    return None
+
+def greedy_search(initial_state, goal_state_func, operators_func):
+    root = TreeNode(initial_state, g=0)
+
+    counter = 0
+    heap = []
+    heapq.heappush(heap, (heuristic(initial_state), counter, root))
+
+    visited = set()
+
+    while heap:
+        _, _, node = heapq.heappop(heap)
+
+        state_key = tuple(tuple(b.colors) for b in node.state)
+
+        if state_key in visited:
+            continue
+        visited.add(state_key)
+
+        if goal_state_func(node.state):
+            return node
+
+        for child_state in operators_func(node.state):
+            child_key = tuple(tuple(b.colors) for b in child_state)
+            if child_key not in visited:
+                child_node = TreeNode(child_state, g=node.g + 1)
+                node.add_child(child_node)
+
+                counter += 1
+                heapq.heappush(heap, (heuristic(child_state), counter, child_node))
+
+    return None
+
+def weighted_astar_search(initial_state, goal_state_func, operators_func, weight):
+    root = TreeNode(initial_state, g=0)
+
+    counter = 0
+    heap = []
+    heapq.heappush(heap, (weight * heuristic(initial_state), counter, root))
+
+    visited = {}
+
+    while heap:
+        f, _, node = heapq.heappop(heap)
+
+        state_key = tuple(tuple(b.colors) for b in node.state)
+
+        if state_key in visited and visited[state_key] <= node.g:
+            continue
+        visited[state_key] = node.g
+
+        if goal_state_func(node.state):
+            return node
+
+        for child_state in operators_func(node.state):
+            child_g = node.g + 1
+            child_h = heuristic(child_state)
+            child_f = child_g + weight * child_h
+
+            child_node = TreeNode(child_state, g=child_g)
+            node.add_child(child_node)
+
+            counter += 1
+            heapq.heappush(heap, (child_f, counter, child_node))
 
     return None

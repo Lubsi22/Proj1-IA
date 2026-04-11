@@ -1,12 +1,12 @@
 import sys
 import os
 import time
-from .Algorithms import bfs_res, dfs_res, dls_res, iddfs_res, ucs_res, astar_res
+from .Algorithms import bfs_res, dfs_res, dls_res, iddfs_res, ucs_res, astar_res, greedy_res, weighted_astar_res
 from Controller.Level import level_loader
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-def print_to_file(algorithm, level, depth_limit, max_depth):
+def print_to_file(algorithm, level, depth_limit, max_depth, weight):
 
     if algorithm == "Breadth First Search":
         print_to_file_aux(bfs_res, algorithm, "bfs", level)
@@ -20,7 +20,11 @@ def print_to_file(algorithm, level, depth_limit, max_depth):
         print_to_file_aux(ucs_res, algorithm, "ucs", level)
     elif algorithm == "A* Search":  
         print_to_file_aux(astar_res, algorithm, "astar", level)
-
+    elif algorithm == "Greedy Search":  
+        print_to_file_aux(greedy_res, algorithm, "greedy", level)
+    elif algorithm == "Weighted A*":
+        print_to_file_aux(lambda b: weighted_astar_res(b, weight), algorithm, "w_astar", level)
+    
 
 def print_to_file_aux(algorithm_func, algorithm, acronym, level):
     
