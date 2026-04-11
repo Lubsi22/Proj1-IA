@@ -12,7 +12,7 @@ from Controller.Level import level_loader
 from View.Draw import draw_level, draw_level_buttons, draw_algorithm_buttons, draw_input_buttons, draw_exit_button, draw_game_menu_button, draw_completion_screen, draw_move_counter
 from Controller.Button import level_buttons, algorithm_buttons, exit_button, game_menu_button, completion_buttons
 from Search.File import print_to_file
-from Search.Algorithms import a_star_search, breadth_first_search, depth_first_search, depth_limited_search, iterative_deepening_search, check_win, child_bottle_states
+from Search.Algorithms import a_star_search, breadth_first_search, depth_first_search, depth_limited_search, iterative_deepening_search, uniform_cost_search, check_win, child_bottle_states
 
 
 # pygame setup
@@ -47,6 +47,8 @@ def launch_level(game, level):
             goal = depth_limited_search(bottles, check_win, child_bottle_states, game["depth_limit"])
         elif game["pc_algorithm"] == "Iterative Deepening":
             goal = iterative_deepening_search(bottles, check_win, child_bottle_states, game["max_depth"])
+        elif game["pc_algorithm"] == "Uniform Cost":
+            goal = uniform_cost_search(bottles, check_win, child_bottle_states)
         else:
             goal = a_star_search(bottles, check_win, child_bottle_states)
 

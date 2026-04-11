@@ -1,7 +1,7 @@
 import sys
 import os
 import time
-from .Algorithms import bfs_res, dfs_res, dls_res, iddfs_res, astar_res
+from .Algorithms import bfs_res, dfs_res, dls_res, iddfs_res, ucs_res, astar_res
 from Controller.Level import level_loader
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -12,13 +12,14 @@ def print_to_file(algorithm, level, depth_limit, max_depth):
         print_to_file_aux(bfs_res, algorithm, "bfs", level)
     elif algorithm == "Depth First Search":
         print_to_file_aux(dfs_res, algorithm, "dfs", level)
-    elif algorithm == "A* Search":                    
-        print_to_file_aux(astar_res, algorithm, "astar", level)
     elif algorithm == "Depth Limited Search":
         print_to_file_aux(lambda b: dls_res(b, depth_limit), algorithm, "dls", level)
     elif algorithm == "Iterative Deepening":
         print_to_file_aux(lambda b: iddfs_res(b, max_depth), algorithm, "iddfs", level)
-
+    elif algorithm == "Uniform Cost":
+        print_to_file_aux(ucs_res, algorithm, "ucs", level)
+    elif algorithm == "A* Search":  
+        print_to_file_aux(astar_res, algorithm, "astar", level)
 
 
 def print_to_file_aux(algorithm_func, algorithm, acronym, level):

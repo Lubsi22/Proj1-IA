@@ -22,6 +22,11 @@ def dls_res(bottles, depth_limit):
     print_solution(goal)
     return goal
 
+def ucs_res(bottles):
+    goal = uniform_cost_search(bottles, check_win, child_bottle_states)
+    print_solution(goal)
+    return goal
+
 def iddfs_res(bottles, max_depth):
     
     goal = iterative_deepening_search(bottles, check_win, child_bottle_states, max_depth)
@@ -142,6 +147,38 @@ def iterative_deepening_search(initial_state, goal_state_func, operators_func, m
             return result
     return None
 
+# behaves like bfs because every move costs 1
+def uniform_cost_search(initial_state, goal_state_func, operators_func):
+    root = TreeNode(initial_state, g=0)
+
+    counter = 0
+    heap = []
+    heapq.heappush(heap, (0, counter, root))
+
+    visited = {}
+
+    while heap:
+        cost, _, node = heapq.heappop(heap)
+
+        state_key = tuple(tuple(b.colors) for b in node.state)
+
+        if state_key in visited and visited[state_key] <= node.g:
+            continue
+        visited[state_key] = node.g
+
+        if goal_state_func(node.state):
+            return node
+
+        for child_state in operators_func(node.state):
+            child_g = node.g + 1
+
+            child_node = TreeNode(child_state, g=child_g)
+            node.add_child(child_node)
+
+            counter += 1
+            heapq.heappush(heap, (child_g, counter, child_node))
+
+    return None
 
 def heuristic(bottles):
     color_breaks = 0
