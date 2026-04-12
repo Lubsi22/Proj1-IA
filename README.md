@@ -4,11 +4,59 @@ A puzzle-solving game implementation using Artificial Intelligence techniques to
 
 ---
 
-## How to Run
+## Getting Started
+
+### 1. Create and activate a virtual environment
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
 ```
-cd src
-python3 main.py
+
+### 2. Install dependencies
+
+```bash
+pip install pygame
 ```
+
+### 3. Launch the game
+
+```bash
+python3 ./src/main.py
+```
+
+---
+
+## How to Play
+
+### Player mode
+
+1. On the main menu, click any **Level** button on the left to start playing that level.
+2. **Click a bottle** to select it — a gold arrow will appear above it.
+3. **Click a second bottle** to pour. The move is only valid if the destination is not full and its top color matches the color being poured.
+4. Click the selected bottle again to **deselect** it.
+5. Repeat until every bottle is either empty or filled with a single uniform color.
+
+> **Stuck?** Hit the green **Hint** button — the source bottle will glow green and the destination will glow blue, showing you the best next move according to A\*.
+
+### Algorithm mode
+
+1. On the main menu, click an **algorithm** from the right column to select it (it will highlight in blue).
+2. Then click a **level** on the left — the algorithm will solve it automatically and play back the moves step by step.
+3. Click **Cancel Selection** to deselect the current algorithm and return to player mode.
+
+#### Available algorithms
+
+| Algorithm | Type |
+|---|---|
+| Breadth First Search | Uninformed |
+| Depth First Search | Uninformed |
+| Depth Limited Search | Uninformed |
+| Iterative Deepening | Uninformed |
+| Uniform Cost | Uninformed |
+| A\* Search | Informed |
+| Greedy Search | Informed |
+| Weighted A\* | Informed |
 
 ---
 
@@ -124,9 +172,7 @@ A **solved** state where:
     - Renders rectangle for each color layer at correct y-coordinate
 
 
-**Planned Features**:
-- AI solver using A* search algorithm
-- Multiple difficulty levels with procedural generation
-- Move history and undo functionality
-- Timer and move counter
-- Hint system using heuristic-based suggestions
+
+
+
+
