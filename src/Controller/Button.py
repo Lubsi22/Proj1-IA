@@ -6,6 +6,7 @@ SCREEN_HEIGHT = 720
 LEVEL_BUTTON_WIDTH = 220
 ALGORITHM_BUTTON_WIDTH = 300
 EXIT_BUTTON_WIDTH = 200
+RUN_ALL_BUTTON_WIDTH = 300
 GAME_MENU_BUTTON_WIDTH = 180
 COMPLETE_BUTTON_WIDTH = 220
 BUTTON_HEIGHT = 40
@@ -83,6 +84,16 @@ def exit_button(num_levels):
         "rect": pygame.Rect(button_x, button_y, EXIT_BUTTON_WIDTH, BUTTON_HEIGHT),
     }
 
+def run_all_button():
+    return {
+        "text": "Run All Algorithms",
+        "rect": pygame.Rect(
+            (SCREEN_WIDTH - RUN_ALL_BUTTON_WIDTH) // 2,
+            20,
+            RUN_ALL_BUTTON_WIDTH,
+            BUTTON_HEIGHT,
+        ),
+    }
 
 def game_menu_button():
     return {

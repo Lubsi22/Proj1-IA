@@ -7,33 +7,29 @@ from Controller.Controller import check_win, child_bottle_states
 def bfs_res(bottles):
 
     goal = breadth_first_search(bottles, check_win, child_bottle_states)
-    print_solution(goal)
     return goal
 
 def dfs_res(bottles):
 
     goal = depth_first_search(bottles, check_win, child_bottle_states)
-    print_solution(goal)
     return goal
 
 def dls_res(bottles, depth_limit):
     
     goal = depth_limited_search(bottles, check_win, child_bottle_states, depth_limit)
-    print_solution(goal)
     return goal
 
 def ucs_res(bottles):
     
     goal = uniform_cost_search(bottles, check_win, child_bottle_states)
-    print_solution(goal)
     return goal
 
 def iddfs_res(bottles, max_depth):
     
     goal = iterative_deepening_search(bottles, check_win, child_bottle_states, max_depth)
-    print_solution(goal)
     return goal
 
+'''
 def print_solution(goal):
 
     if goal is None:
@@ -56,6 +52,7 @@ def print_solution(goal):
         for bottle in state:
             print(bottle, end=" ")
         print()
+'''
 
 def breadth_first_search(initial_state, goal_state_func, operators_func):
     root = TreeNode(initial_state)   # create the root node in the search tree
@@ -201,19 +198,16 @@ def heuristic(bottles):
 
 def astar_res(bottles):
     goal = a_star_search(bottles, check_win, child_bottle_states)
-    print_solution(goal)
     return goal
 
 def greedy_res(bottles):
     
     goal = greedy_search(bottles, check_win, child_bottle_states)
-    print_solution(goal)
     return goal
 
 def weighted_astar_res(bottles, weight):
     
     goal = weighted_astar_search(bottles, check_win, child_bottle_states, weight)
-    print_solution(goal)
     return goal
 
 def a_star_search(initial_state, goal_state_func, operators_func):

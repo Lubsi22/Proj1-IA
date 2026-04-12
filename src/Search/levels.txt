@@ -1,0 +1,48 @@
+depth_limit: 8
+max_depth: 8
+weight: 1.5
+
+[Level 1]
+red red blue | 3
+red blue blue | 3
+empty | 3
+
+[Level 2]
+red green blue | 3
+blue red green | 3
+green blue red | 3
+empty | 3
+
+[Level 3]
+yellow red blue green | 4
+green yellow red blue | 4
+blue green yellow red | 4
+red blue green yellow | 4
+empty | 4
+empty | 4
+
+[Level 4]
+purple orange purple orange | 4
+cyan purple cyan purple | 4
+orange cyan orange cyan | 4
+empty | 4
+empty | 4
+
+[Level 5]
+pink teal lime pink | 5
+lime pink teal brown | 5
+teal brown pink lime | 5
+brown lime brown teal | 5
+teal pink lime brown | 5
+empty | 5
+empty | 5
+
+[Level 6]
+red blue green yellow | 4
+yellow purple red orange | 4
+orange green purple blue | 4
+blue yellow orange green | 4
+green red yellow purple | 4
+purple orange blue red | 4
+empty | 4
+empty | 4
