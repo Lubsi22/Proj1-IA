@@ -1,5 +1,6 @@
 import pygame
 import time
+import os
 
 from Controller.Controller import (
     select_bottle,
@@ -9,9 +10,9 @@ from Controller.Controller import (
     check_win,
 )
 from Controller.Level import level_loader
-from View.Draw import draw_level, draw_level_buttons, draw_algorithm_buttons, draw_input_buttons, draw_exit_button, draw_game_menu_button, draw_completion_screen, draw_move_counter
-from Controller.Button import level_buttons, algorithm_buttons, exit_button, game_menu_button, completion_buttons
-from Search.File import print_to_file
+from View.Draw import draw_level, draw_level_buttons, draw_algorithm_buttons, draw_input_buttons, draw_exit_button, draw_game_menu_button, draw_completion_screen, draw_move_counter, draw_button
+from Controller.Button import level_buttons, algorithm_buttons, exit_button, run_all_button, game_menu_button, completion_buttons
+from Search.File import print_to_file, run_all_algorithms_from_file
 from Search.Algorithms import a_star_search, breadth_first_search, depth_first_search, depth_limited_search, iterative_deepening_search, uniform_cost_search, check_win, child_bottle_states, greedy_search, weighted_astar_search
 
 
@@ -94,6 +95,7 @@ def reset_menu():
         "max_depth": 30,
         "weight": 1.5,
         "exit_button": exit_button(num_levels),
+        "run_all_button": run_all_button(),
         "game_menu_button": game_menu_button(),
         "completion_buttons": completion_buttons(),
         "pc_moves": [],
@@ -119,6 +121,9 @@ while running:
             if g["exit_button"]["rect"].collidepoint(event.pos):
                 running = False
                 break
+            if g["run_all_button"]["rect"].collidepoint(event.pos):
+                input_file = os.path.join(os.path.dirname(__file__), "Search", "levels.txt")
+                run_all_algorithms_from_file(input_file)
 
             for a_btn in g["algorithm_buttons"]:
                 if a_btn["rect"].collidepoint(event.pos):
@@ -147,9 +152,9 @@ while running:
 
             elif g["pc_algorithm"] == "Weighted A*":
                 if event.key == pygame.K_UP:
-                    g["weight"] = min(50, g["weight"] + 0.5)
+                    g["weight"] = min(50.5, g["weight"] + 0.5)
                 elif event.key == pygame.K_DOWN:
-                    g["weight"] = max(1, g["weight"] - 0.5)
+                    g["weight"] = max(0.5, g["weight"] - 0.5)
 
         elif event.type == pygame.MOUSEBUTTONDOWN and g["state"] == COMPLETE:
             if g["completion_buttons"]["menu"]["rect"].collidepoint(event.pos):
@@ -190,6 +195,7 @@ while running:
         draw_level_buttons(screen, g["level_buttons"])
         draw_algorithm_buttons(screen, g["algorithm_buttons"], g["pc_algorithm"])
         draw_exit_button(screen, g["exit_button"])
+        draw_button(screen, g["run_all_button"]["text"], g["run_all_button"]["rect"], (0, 150, 100))
 
         if g["pc_algorithm"] == "Depth Limited Search":
             draw_input_buttons(screen, g["depth_limit"], g["pc_algorithm"])
