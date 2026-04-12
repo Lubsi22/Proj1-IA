@@ -33,31 +33,46 @@ def print_to_file_aux(algorithm_func, algorithm, acronym, level):
     os.makedirs(os.path.dirname(file_name), exist_ok=True)
 
 
-    with open(file_name, "a") as f:
+    with open(file_name, "w") as f:
         sys.stdout = f
-        print(algorithm)
+        print("=" * 40)
+        print(f"Algorithm: {algorithm}")
+        print(f"Level: {level}")
+        print("=" * 40)
         print()
 
         output_to_file(algorithm_func, level)
+    
+    sys.stdout = sys.__stdout__
     
 
 
 def output_to_file(algorithm_func, level):
 
-    print(level)
     bottles = level_loader[level]()
 
     start = time.time()
     goal = algorithm_func(bottles)
     elapsed = time.time() - start
 
-    print()
     if goal is not None:
-        print(f"Cost: {goal.g} move(s)")
+        print(f"Solution found in {goal.g} move(s):")
+        print()
+        path = []
+        node = goal
+        while node is not None:
+            path.append(node.state)
+            node = node.parent
+        path.reverse()
+        for step, state in enumerate(path):
+            print(f"Step {step}:", end=" ")
+            for bottle in state:
+                print(bottle, end=" ")
+            print()
     else:
-        print("Cost: No solution found")
+        print("No solution found.")
 
+    print()
+    print(f"Cost: {goal.g if goal else 'N/A'} move(s)")
     print(f"Time: {elapsed:.4f} seconds")
     print()
-    
-    sys.stdout = sys.__stdout__
