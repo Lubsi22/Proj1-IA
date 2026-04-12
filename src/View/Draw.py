@@ -18,9 +18,11 @@ COLOR_MAP = {
     "brown":  (139, 90,  43),
 }
 
-def draw_level(screen, bottles, selected_bottle=None):
-    for bottle in bottles:
-        draw_bottle(screen, bottle, is_selected=(bottle == selected_bottle))
+def draw_level(screen, bottles, selected_bottle=None, hint_src_idx=None, hint_dst_idx=None):
+    for i, bottle in enumerate(bottles):
+        is_hint_src = (hint_src_idx is not None and i == hint_src_idx)
+        is_hint_dst = (hint_dst_idx is not None and i == hint_dst_idx)
+        draw_bottle(screen, bottle, is_selected=(bottle == selected_bottle), is_hint_src=is_hint_src, is_hint_dst=is_hint_dst)
 
 
 def draw_move_counter(screen, move_count, total_moves=None):
@@ -41,7 +43,7 @@ def draw_move_counter(screen, move_count, total_moves=None):
     screen.blit(label, rect)
 
 
-def draw_bottle(screen, bottle, is_selected=False):
+def draw_bottle(screen, bottle, is_selected=False, is_hint_src=False, is_hint_dst=False):
     x = bottle.x
     y_top = bottle.y
     width = bottle.width
@@ -83,6 +85,34 @@ def draw_bottle(screen, bottle, is_selected=False):
             halo_color,
             [(marker_x, marker_top), (marker_x - 8, marker_top + 12), (marker_x + 8, marker_top + 12)],
         )
+
+    if is_hint_src or is_hint_dst:
+        pulse = (pygame.time.get_ticks() // 300) % 2
+        if is_hint_src:
+            halo_color = (50, 220, 80) if pulse == 0 else (130, 255, 150)
+        else:
+            halo_color = (50, 160, 255) if pulse == 0 else (130, 210, 255)
+ 
+        halo_rect = outer_rect.inflate(16, 20)
+        pygame.draw.rect(
+            screen,
+            halo_color,
+            halo_rect,
+            width=3,
+            border_bottom_left_radius=BOTTLE_CORNER_RADIUS + 8,
+            border_bottom_right_radius=BOTTLE_CORNER_RADIUS + 8,
+        )
+
+        marker_x = outer_rect.centerx
+        marker_top = outer_rect.top - 18
+        if is_hint_src:
+            pygame.draw.polygon(
+                screen,
+                halo_color,
+                [(marker_x, marker_top + 12), (marker_x - 8, marker_top), (marker_x + 8, marker_top)],
+            )
+        else:
+            pygame.draw.circle(screen, halo_color, (marker_x, marker_top + 6), 7, width=3)
 
 
 def draw_color(screen, bottle):
@@ -199,6 +229,8 @@ def draw_exit_button(screen, button):
 def draw_game_menu_button(screen, button):
     draw_button(screen, button["text"], button["rect"], (40, 120, 210))
 
+def draw_hint_button(screen, button):
+    draw_button(screen, button["text"], button["rect"], (30, 160, 80))
 
 def draw_completion_screen(screen, moves, buttons, level=None):
     overlay = pygame.Surface((screen.get_width(), screen.get_height()), pygame.SRCALPHA)

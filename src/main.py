@@ -10,8 +10,8 @@ from Controller.Controller import (
     check_win,
 )
 from Controller.Level import level_loader
-from View.Draw import draw_level, draw_level_buttons, draw_algorithm_buttons, draw_input_buttons, draw_exit_button, draw_game_menu_button, draw_completion_screen, draw_move_counter, draw_button
-from Controller.Button import level_buttons, algorithm_buttons, exit_button, run_all_button, game_menu_button, completion_buttons
+from View.Draw import draw_level, draw_level_buttons, draw_algorithm_buttons, draw_input_buttons, draw_exit_button, draw_game_menu_button, draw_completion_screen, draw_move_counter, draw_button, draw_hint_button
+from Controller.Button import level_buttons, algorithm_buttons, exit_button, run_all_button, game_menu_button, completion_buttons, hint_button
 from Search.File import print_to_file, run_all_algorithms_from_file
 from Search.Algorithms import a_star_search, breadth_first_search, depth_first_search, depth_limited_search, iterative_deepening_search, uniform_cost_search, check_win, child_bottle_states, greedy_search, weighted_astar_search
 
@@ -26,6 +26,33 @@ MENU = "menu"
 LEVEL = "level"
 PC = "pc"
 COMPLETE = "complete"
+
+def compute_hint(bottles):
+    goal = a_star_search(bottles, check_win, child_bottle_states)
+    if goal is None:
+        return None, None
+ 
+    path = []
+    node = goal
+    while node:
+        path.append(node.state)
+        node = node.parent
+    path.reverse()
+ 
+    if len(path) < 2:
+        return None, None
+ 
+    current_state = path[0]
+    next_state    = path[1]
+ 
+    src_idx = dst_idx = None
+    for i, (cur, nxt) in enumerate(zip(current_state, next_state)):
+        if len(cur.colors) > len(nxt.colors):
+            src_idx = i
+        elif len(cur.colors) < len(nxt.colors):
+            dst_idx = i
+ 
+    return src_idx, dst_idx
 
 
 def open_completion(game, moves):
@@ -97,12 +124,15 @@ def reset_menu():
         "exit_button": exit_button(num_levels),
         "run_all_button": run_all_button(),
         "game_menu_button": game_menu_button(),
+        "hint_button": hint_button(),
         "completion_buttons": completion_buttons(),
         "pc_moves": [],
         "pc_move_index": 0,
         "pc_last_time": 0,
         "pc_algorithm": None,
         "move_count": 0,
+        "hint_src_idx": None,
+        "hint_dst_idx": None,
         
     }
 
@@ -169,10 +199,18 @@ while running:
                 continue
 
             if g["state"] == LEVEL:
+                if g["hint_button"]["rect"].collidepoint(event.pos):
+                    src, dst = compute_hint(g["bottles"])
+                    g["hint_src_idx"] = src
+                    g["hint_dst_idx"] = dst
+                    continue
+
                 move_result = select_bottle(event.pos, g["bottles"])
                 if move_result and move_result.get("type") == "move":
                     if pour(move_result["source"], move_result["destination"]):
                         g["move_count"] += 1
+                        g["hint_src_idx"] = None
+                        g["hint_dst_idx"] = None
 
         
     if g["state"] == PC:
@@ -208,9 +246,12 @@ while running:
             screen,
             g["bottles"],
             selected_bottle=get_selected_bottle() if g["state"] == LEVEL else None,
+            hint_src_idx=g.get("hint_src_idx") if g["state"] == LEVEL else None,
+            hint_dst_idx=g.get("hint_dst_idx") if g["state"] == LEVEL else None,
         )
         draw_game_menu_button(screen, g["game_menu_button"])
         if g["state"] == LEVEL:
+            draw_hint_button(screen, g["hint_button"])
             draw_move_counter(screen, g["move_count"])
         elif g["state"] == PC:
             total_moves = max(0, len(g["pc_moves"]) - 1)

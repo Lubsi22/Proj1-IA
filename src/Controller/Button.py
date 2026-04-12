@@ -101,6 +101,12 @@ def game_menu_button():
         "rect": pygame.Rect(20, 20, GAME_MENU_BUTTON_WIDTH, BUTTON_HEIGHT),
     }
 
+def hint_button():
+    return {
+        "text": "Hint",
+        "rect": pygame.Rect(20, 20 + BUTTON_HEIGHT + ROW_GAP, GAME_MENU_BUTTON_WIDTH, BUTTON_HEIGHT),
+    }
+
 
 def completion_buttons():
     gap = 30
