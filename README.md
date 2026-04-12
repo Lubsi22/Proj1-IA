@@ -4,6 +4,14 @@ A puzzle-solving game implementation using Artificial Intelligence techniques to
 
 ---
 
+## How to Run
+```
+cd src
+python3 main.py
+```
+
+---
+
 ## (1) Problem Specification
 
 ### Definition
